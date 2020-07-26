@@ -76,7 +76,10 @@ Vagrant.configure("2") do |config|
         python3-dev \
         python3-pip \
         tmux \
-        vim
+        vim \
+        nodejs \
+        npm \
+        build-essential
 
     # Set up MySQL database and development user
     mysql -e "CREATE DATABASE IF NOT EXISTS hknweb;"
