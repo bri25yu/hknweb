@@ -77,9 +77,9 @@ Vagrant.configure("2") do |config|
         python3-pip \
         tmux \
         vim \
-        nodejs \
-        npm \
-        build-essential
+        nodejs=3.5.2 \  # https://packages.ubuntu.com/xenial/nodejs
+        npm=4.2.6 \  # https://packages.ubuntu.com/xenial/npm
+        build-essential=12.1  # https://packages.ubuntu.com/xenial/build-essential
 
     # Set up MySQL database and development user
     mysql -e "CREATE DATABASE IF NOT EXISTS hknweb;"
