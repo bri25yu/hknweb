@@ -78,10 +78,6 @@ Vagrant.configure("2") do |config|
         tmux \
         vim
 
-    # Installing Node.js v14.x, see https://github.com/nodesource/distributions/blob/master/README.md
-    curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
-    sudo apt-get install -y nodejs
-
     # Set up MySQL database and development user
     mysql -e "CREATE DATABASE IF NOT EXISTS hknweb;"
     mysql -e "GRANT ALL PRIVILEGES ON hknweb.* TO 'hkn'@'localhost' IDENTIFIED BY 'hknweb-dev';"
@@ -98,6 +94,19 @@ Vagrant.configure("2") do |config|
     cat "export HKNWEB_MODE=dev" >> /home/vagrant/.bashrc
   SHELL
 
+  $provision = <<-SHELL
+    cd ~/hknweb; make setup
+
+    # Install nvm https://github.com/nvm-sh/nvm
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+    nvm install node
+  SHELL
+
   # Setup pipenv and virtualenv
-  config.vm.provision "shell", privileged: false, inline: "cd ~/hknweb; make setup"
+  config.vm.provision "shell", privileged: false, inline: $provision
 end
