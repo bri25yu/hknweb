@@ -76,10 +76,11 @@ Vagrant.configure("2") do |config|
         python3-dev \
         python3-pip \
         tmux \
-        vim \
-        nodejs=3.5.2 \  # https://packages.ubuntu.com/xenial/nodejs
-        npm=4.2.6 \  # https://packages.ubuntu.com/xenial/npm
-        build-essential=12.1  # https://packages.ubuntu.com/xenial/build-essential
+        vim
+
+    # Installing Node.js v14.x, see https://github.com/nodesource/distributions/blob/master/README.md
+    curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+    sudo apt-get install -y nodejs
 
     # Set up MySQL database and development user
     mysql -e "CREATE DATABASE IF NOT EXISTS hknweb;"
