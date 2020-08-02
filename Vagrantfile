@@ -97,14 +97,21 @@ Vagrant.configure("2") do |config|
   $provision = <<-SHELL
     cd ~/hknweb; make setup
 
-    # Install nvm https://github.com/nvm-sh/nvm
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+    # Credit to https://github.com/danielwrobert/vagrant-react-webpack/blob/master/Vagrantfile
 
-    export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+    echo "Installing nvm"
+    curl -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
+    source ~/.nvm/nvm.sh
 
+    echo "Installing Node"
     nvm install node
+    nvm alias default node
+
+    cd /vagrant
+    echo "Installing Node dependencies..."
+    npm install -g react react-dom webpack @babel/core @babel/preset-env @babel/preset-react webpack webpack-cli webpack-dev-server babel-loader css-loader style-loader html-webpack-plugin
+    npm install 
+
   SHELL
 
   # Setup pipenv and virtualenv
