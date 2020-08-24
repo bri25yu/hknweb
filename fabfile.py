@@ -93,18 +93,13 @@ def install_deps(c: Connection):
     print('-- Installing dependencies')
     with c.cd(c.release_path):
         c.run('source .venv/bin/activate && pipenv install --deploy', echo=True, env={'PIPENV_VENV_IN_PROJECT': 'true'})
+        c.run('./provision_frontend.sh prod')
 
 
 def django_migrate(c: Connection):
     print('-- Migrating tables')
     with c.cd(c.release_path):
         c.run('HKNWEB_MODE=prod .venv/bin/python ./manage.py migrate')
-
-
-def provision_frontend(c: Connection):
-    print('-- Provisioning frontend')
-    with c.cd(c.release_path):
-        c.run('npm run dev --prefix hknweb/frontend')
 
 
 def django_collectstatic(c: Connection):
@@ -159,7 +154,6 @@ def update(c: Connection):
         create_venv(c)
     install_deps(c)
     django_migrate(c)
-    provision_frontend(c)
     django_collectstatic(c)
 
 
