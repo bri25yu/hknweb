@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'markdownx',
     'social_django',
     'hknweb.frontend',
+    'django_filters',  # See https://www.django-rest-framework.org/api-guide/filtering/
 ]
 
 MIDDLEWARE = [
