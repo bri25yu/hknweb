@@ -9,12 +9,10 @@ class Facet extends BaseApp {
     constructor(props) {
       super(props);
       this.facetName = props.facetName;
-      this.API_PATH = props.datapath;
-      this.mapping_fn = props.mapping_fn;
     }
 
     render() {
-      const options = this.state.data.map(this.mapping_fn);
+      const options = this.state.data;
         return React.createElement(
             "div",
             {

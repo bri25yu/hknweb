@@ -89,5 +89,6 @@ ul.options li.option-active {
 
 .no-options {
     color: black;
+    height: 0;
 }
   
