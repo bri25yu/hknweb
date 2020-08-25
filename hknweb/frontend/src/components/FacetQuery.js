@@ -2,15 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './style.css';
 import { AUTOCOMPLETE_MAX_ITEMS } from './constants';
+import BaseApp from "./BaseApp";
 
 
-class Facet extends React.Component {
+class Facet extends BaseApp {
     constructor(props) {
-        super(props);
-        this.facetName = props.facetName;
+      super(props);
+      this.facetName = props.facetName;
+      this.API_PATH = props.datapath;
+      this.mapping_fn = props.mapping_fn;
     }
 
     render() {
+      const options = this.state.data.map(this.mapping_fn);
         return React.createElement(
             "div",
             {
@@ -19,7 +23,7 @@ class Facet extends React.Component {
             },
             [
                 <div key={"facetName" + this.facetName} className="facet-text">{this.facetName}</div>,
-                <QueryBar options={[this.facetName]} key='query-bar' />,
+                <QueryBar options={options} key='query-bar' />,
             ]
         )
     }
@@ -43,8 +47,6 @@ class QueryBar extends React.Component {
     };
     
     onChange = (e) => {
-        console.log('onChanges');
-    
         const { options } = this.props;
         const userInput = e.currentTarget.value;
     
