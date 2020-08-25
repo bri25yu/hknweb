@@ -8,10 +8,10 @@ class ICSR(AcademicEntity):
     InstructorCourseSemesterRelation (ICSR)
     """
     # reference attributes
-    icsr_course = models.ForeignKey('Course', on_delete=models.PROTECT, related_name='icsr_course')
-    icsr_department = models.ForeignKey('Department', on_delete=models.PROTECT, related_name='icsr_department')
-    icsr_instructor = models.ForeignKey('Instructor', on_delete=models.PROTECT, related_name='icsr_instructor')
-    icsr_semester = models.ForeignKey('Semester', on_delete=models.PROTECT, related_name='icsr_semester')
+    icsr_course = models.ForeignKey('Course', on_delete=models.PROTECT, related_name='icsr_course', db_constraint=False)
+    icsr_department = models.ForeignKey('Department', on_delete=models.PROTECT, related_name='icsr_department', db_constraint=False)
+    icsr_instructor = models.ForeignKey('Instructor', on_delete=models.PROTECT, related_name='icsr_instructor', db_constraint=False)
+    icsr_semester = models.ForeignKey('Semester', on_delete=models.PROTECT, related_name='icsr_semester', db_constraint=False)
 
     # value attributes
     first_name = models.TextField(max_length=100)
