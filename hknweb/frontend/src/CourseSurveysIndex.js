@@ -11,10 +11,11 @@ import { COURSESURVEYS_FACETS, COURSESURVEYSINDEX_NAME } from './constants';
 class QueryBoard extends React.Component {
     render() {
         let facetElements = [];
-        for (var facet in COURSESURVEYS_FACETS) {
-            facetElements.push(<Facet facetName={facet} key={'facet' + facet} />)
+        for (var i = 0; i < COURSESURVEYS_FACETS.length; i ++) {
+            const facet = COURSESURVEYS_FACETS[i];
+            facetElements.push(<div><Facet facetName={facet} key={'facet' + facet} /></div>)
         }
-        return React.createElement("div", null, facetElements);
+        return React.createElement("div", {className: "query-board"}, facetElements);
     }
 }
 

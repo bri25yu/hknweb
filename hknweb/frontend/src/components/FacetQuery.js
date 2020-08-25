@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './style.css';
+import { AUTOCOMPLETE_MAX_ITEMS } from './constants';
 
 
 class Facet extends React.Component {
@@ -17,7 +18,7 @@ class Facet extends React.Component {
                 key: "facet-" + this.facetName,
             },
             [
-                <div key={"facetName" + this.facetName}>{this.facetName}</div>,
+                <div key={"facetName" + this.facetName} className="facet-text">{this.facetName}</div>,
                 <QueryBar options={[this.facetName]} key='query-bar' />,
             ]
         )
@@ -114,7 +115,7 @@ class QueryBar extends React.Component {
                       {optionName}
                     </li>
                   );
-                })}
+                }).slice(0, AUTOCOMPLETE_MAX_ITEMS)}
               </ul>
             );
           } else {
@@ -136,8 +137,8 @@ class QueryBar extends React.Component {
                 value={userInput}
               />
               <input type="submit" value="" className="search-btn" />
+              {optionList}
             </div>
-            {optionList}
           </React.Fragment>
         );
     }
