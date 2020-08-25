@@ -7,3 +7,6 @@ class DepartmentsView(TemplateView):
 
 class InstructorsView(TemplateView):
     template_name = 'frontend/instructors.html'
+
+class CourseSurveysIndexView(TemplateView):
+    template_name = 'frontend/CourseSurveysIndex.html'

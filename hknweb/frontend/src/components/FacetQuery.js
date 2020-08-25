@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import './style.css';
 
 
@@ -17,12 +17,14 @@ class Facet extends React.Component {
                 key: "facet-" + this.facetName,
             },
             [
-                <div>{this.facetName}</div>,
-                <QueryBar />,
+                <div key={"facetName" + this.facetName}>{this.facetName}</div>,
+                <QueryBar options={[this.facetName]} key='query-bar' />,
             ]
         )
     }
 }
+
+export default Facet;
 
 
 class QueryBar extends React.Component {

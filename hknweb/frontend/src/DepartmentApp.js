@@ -2,7 +2,7 @@ import { render } from "react-dom";
 import React from "react";
 
 import BaseApp from "./components/BaseApp";
-import { DEPARTMENTAPP_NAME } from "./components/constants";
+import { DEPARTMENTAPP_NAME } from "./constants";
 
 
 class DepartmentApp extends BaseApp {

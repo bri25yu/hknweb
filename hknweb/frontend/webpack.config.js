@@ -7,12 +7,17 @@ module.exports = {
           use: {
             loader: "babel-loader"
           }
-        }
+        },
+        {
+          test: /\.css$/i,
+          use: ['style-loader', 'css-loader'],
+        },
       ]
     },
     entry: {
       InstructorApp: './src/InstructorApp.js',
-      DepartmentApp: './src/DepartmentApp.js'
+      DepartmentApp: './src/DepartmentApp.js',
+      CourseSurveysIndex: './src/CourseSurveysIndex.js'
     },
     output: {
       filename: '[name].js',
