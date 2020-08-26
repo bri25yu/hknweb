@@ -1,8 +1,42 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './style.css';
+import '../style/FacetQuery.css';
 import { AUTOCOMPLETE_MAX_ITEMS } from './constants';
 import BaseApp from "./BaseApp";
+
+
+class QueryBoard extends React.Component {
+  /**
+   * 
+   * @param {*} props 
+   * 
+   * @requires props.facets
+   */
+  constructor(props) {
+    super(props);
+    this.facets = props.facets;
+  }
+
+  render() {
+      let facetElements = [];
+      for (const [facetName, facetInfo] of Object.entries(this.facets)) {
+          const [datapath, mapping_fn] = facetInfo;
+          facetElements.push(
+              <div key={'div' + facetName}>
+                  <Facet
+                      facetName={facetName}
+                      key={'facet' + facetName}
+                      datapath={datapath}
+                      mapping_fn={mapping_fn}
+                  />
+              </div>
+          )
+      }
+      return React.createElement("div", {className: "query-board"}, facetElements);
+  }
+}
+
+export default QueryBoard;
 
 
 class Facet extends BaseApp {
@@ -26,8 +60,6 @@ class Facet extends BaseApp {
         )
     }
 }
-
-export default Facet;
 
 
 class QueryBar extends React.Component {
