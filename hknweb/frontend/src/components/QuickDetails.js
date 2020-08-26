@@ -6,7 +6,7 @@ import BaseApp from './BaseApp';
 class QuickDetails extends BaseApp {
     render() {
         const items = [];
-        for (const [datapath, mapping_fn] in this.state.data) {
+        for (const [datapath, mapping_fn] in this.state.data.panels) {
             items.push(<QuickDetailsPanel
                 datapath={datapath}
                 mapping_fn={mapping_fn}
@@ -119,7 +119,7 @@ class Bubble extends Component {
  */
 class ValueBubble extends Bubble {
     constructor(props) {
-        const color;
+        let color;
         if (this.props.value) {
             const scaled = this.props.value / this.props.max_value;
             const r = (scaled < 0.66) ? 255 : 0;

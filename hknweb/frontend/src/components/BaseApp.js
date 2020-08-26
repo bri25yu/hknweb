@@ -1,13 +1,13 @@
 import { Component } from "react";
 
 class BaseApp extends Component {
-  DATAPATH = "api/"
+  DATAPATH = null
   MAPPING_FN = null
 
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
+      data: props.data || [],
       loaded: false,
       placeholder: "Loading"
     };

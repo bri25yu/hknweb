@@ -28,6 +28,7 @@ class QueryBoard extends React.Component {
                       key={'facet' + facetName}
                       datapath={datapath}
                       mapping_fn={mapping_fn}
+                      button_click_fn={this.props.button_click_fn}
                   />
               </div>
           )
@@ -55,7 +56,11 @@ class Facet extends BaseApp {
             },
             [
                 <div key={"facetName" + this.facetName} className="facet-text">{this.facetName}</div>,
-                <QueryBar options={options} key='query-bar' />,
+                <QueryBar
+                  options={options}
+                  key='query-bar'
+                  button_click_fn={(userInput) => this.props.button_click_fn([this.facetName, userInput])}
+                />,
             ]
         )
     }
@@ -64,6 +69,11 @@ class Facet extends BaseApp {
 
 class QueryBar extends React.Component {
     // From https://blog.bitsrc.io/building-a-react-autocomplete-component-from-scratch-b78105324f4c
+
+    constructor(props) {
+      super(props);
+      this.button_click_fn = props.button_click_fn || ((userInput) => userInput);
+    }
 
     static propTypes = {
         options: PropTypes.instanceOf(Array).isRequired
@@ -168,7 +178,7 @@ class QueryBar extends React.Component {
                 onKeyDown={onKeyDown}
                 value={userInput}
               />
-              <input type="submit" value="" className="search-btn" />
+              <input type="button" value="" className="search-btn" onClick={() => this.button_click_fn(userInput)} />
               {optionList}
             </div>
           </React.Fragment>
