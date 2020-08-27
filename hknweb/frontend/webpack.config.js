@@ -22,5 +22,8 @@ module.exports = {
     output: {
       filename: '[name].js',
       path: __dirname + '/static/frontend'
+    },
+    devServer: {
+        writeToDisk: true,
     }
   };
