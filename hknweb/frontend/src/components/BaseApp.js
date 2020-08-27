@@ -15,31 +15,36 @@ class BaseApp extends Component {
     this.mapping_fn = props.mapping_fn || this.MAPPING_FN;
   }
 
+  responseCallback(response) {
+    if (response.status > 400) {
+      this.state.placeholder = "Something went wrong!";
+      return;
+    }
+    return response.json();
+  }
+
+  dataCallback(data, rerender) {
+    if (data) {
+      data = Array.isArray(data) ? data : [data];
+      data = data.map(this.mapping_fn);
+      if (rerender) {
+        this.setState(() => {
+          return {
+            data,
+            loaded: true
+          };
+        });
+      } else {
+        this.state.data = data;
+      }
+    }
+  }
+
   fetchData(rerender=false) {
     if (this.datapath) {
       fetch(this.datapath)
-      .then(response => {
-        if (response.status > 400) {
-          this.state.placeholder = "Something went wrong!";
-          return;
-        }
-        return response.json();
-      })
-      .then(data => {
-        if (data) {
-          if (rerender) {
-            this.setState(() => {
-              data = data.map(this.mapping_fn);
-              return {
-                data,
-                loaded: true
-              };
-            });
-          } else {
-            this.state.data = data.map(this.mapping_fn);
-          }
-        }
-      });
+      .then(this.responseCallback)
+      .then(data => this.dataCallback(data, rerender));
     }
   }
 

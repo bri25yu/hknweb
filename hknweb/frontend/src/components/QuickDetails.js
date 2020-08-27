@@ -7,10 +7,10 @@ class QuickDetails extends BaseApp {
     render() {
         const items = this.state.data.map(dataset => {
             const [datapath, mapping_fn] = dataset;
-            console.log(mapping_fn);
             return <QuickDetailsPanel
                 datapath={datapath}
                 mapping_fn={mapping_fn}
+                key={`quick-details-panel-${datapath}`}
             />
         });
 
@@ -27,16 +27,27 @@ export default QuickDetails;
 
 class QuickDetailsPanel extends BaseApp {
     render() {
-        // console.log(`quickdetailspanel: ${this.state.data}`);
-        const to_display = this.state.data[2];
-        const p = this.state.data.slice(0, 2);
+        let items = [];
+        if (this.state.data && this.state.data.some(v => v)) {
+            const data = this.state.data[0];
+            const to_display = data[2];
+            const p = data.slice(0, 2);
+            items = [
+                <InfoBar
+                    to_display={to_display}
+                    key={'info-bar'}
+                />,
+                <Chart
+                    datapath={p[0]}
+                    mapping_fn={p[1]}
+                    key={'chart'}
+                />,
+            ]
+        }
         return React.createElement(
             "div",
             {className: "quick-details-panel"},
-            [
-                <InfoBar to_display={to_display} />,
-                <Chart datapath={p[0]} mapping_fn={p[1]} />,
-            ]
+            items
         )
     }
 }
@@ -47,9 +58,9 @@ class QuickDetailsPanel extends BaseApp {
  */
 class InfoBar extends Component {
     render() {
-        const items = !this.props.to_display.some(v => v) ?
+        const items = !(this.props.to_display && this.props.to_display.some(v => v)) ?
             [] : this.props.to_display.map((item_to_display) => {
-            return <div className="info-bar-item">
+            return <div className="info-bar-item" key={item_to_display}>
                 {item_to_display}
             </div>
         });
@@ -64,11 +75,12 @@ class InfoBar extends Component {
 
 class Chart extends BaseApp {
     render() {
-        const items = !this.state.data.some(v => v) ? [] : this.state.data.map((p) => {
+        const items = !this.state.data.some(v => v) ? [] : this.state.data.map(p => {
             const [datapath, mapping_fn] = p;
             return <ChartRow
                 datapath={datapath}
                 mapping_fn={mapping_fn}
+                key={`chart-row-${datapath}`}
             />;
         });
 
@@ -83,14 +95,24 @@ class Chart extends BaseApp {
 
 class ChartRow extends BaseApp {
     render() {
-        return <div className="chart-row">
-            {this.state.data.description}
-            <ValueBubble
-                value={this.state.data.value}
-                max_value={this.state.data.max_value}
-                inverted={this.state.data.inverted}
-            />
-        </div>
+        let data = this.state.data;
+        let items = [];
+        if (data && data.some(v => v)) {
+            items = [
+                this.state.data.description,
+                <ValueBubble
+                    value={this.state.data.value}
+                    max_value={this.state.data.max_value}
+                    inverted={this.state.data.inverted}
+                    key={"value-bubble"}
+                />
+            ]
+        }
+        return React.createElement(
+            "div",
+            {className:"chart-row"},
+            items
+        )
     }
 }
 

@@ -52,10 +52,12 @@ class CourseSurveysIndex extends React.Component {
                 <QueryBoard
                     facets={COURSESURVEYS_FACETS}
                     button_click_fn={this.button_click_fn}
+                    key={"query-board"}
                 />,
                 <QuickDetails
                     datapath={datapath}
                     mapping_fn={COURSESURVEYS_QUICKDETAILS_MAPPING_FN}
+                    key={"quick-details"}
                 />,
             ]
         )

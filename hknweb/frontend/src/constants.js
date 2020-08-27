@@ -47,12 +47,15 @@ export function COURSESURVEYS_QUICKDETAILS_DATAPATH_FN(i, s, c) {
 }
 
 function COURSESURVEYS_CHARTROW_MAPPING_FN(data) {
-    // console.log(`chartrow: ${data}`);
-    return null;
+    return {
+        description: data.question_text,
+        value: data.rating_value,
+        max_value: data.range_max,
+        inverted: data.inverted,
+    };
 }
 
 function COURSESURVEYS_CHART_MAPPING_FN(data) {
-    // console.log(`chart: ${data}`);
     return [
         `${COURSESURVEYS_RATINGS_DATAPATH}/${data.id}`,
         COURSESURVEYS_CHARTROW_MAPPING_FN
@@ -60,7 +63,6 @@ function COURSESURVEYS_CHART_MAPPING_FN(data) {
 }
 
 function COURSESURVEYS_QUICKDETAILSPANEL_MAPPING_FN(data) {
-    console.log(`quickdetailspanel: ${data}`);
     return [
         `${COURSESURVEYS_RATINGS_DATAPATH}/?${RATING_SURVEY__ID_ATTRIBUTE_NAME}=${data.id}`,
         COURSESURVEYS_CHART_MAPPING_FN,
