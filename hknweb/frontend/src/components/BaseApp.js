@@ -1,18 +1,11 @@
 import { Component } from "react";
 
 class BaseApp extends Component {
-  DATAPATH = null
-  MAPPING_FN = null
-
   constructor(props) {
     super(props);
     this.state = {
       data: props.data || [],
-      loaded: false,
-      placeholder: "Loading"
     };
-    this.datapath = props.datapath || this.DATAPATH;
-    this.mapping_fn = props.mapping_fn || this.MAPPING_FN;
   }
 
   responseCallback(response) {
@@ -23,37 +16,31 @@ class BaseApp extends Component {
     return response.json();
   }
 
-  dataCallback(data, rerender) {
+  dataCallback(data, mapping_fn) {
     if (data) {
       data = Array.isArray(data) ? data : [data];
-      data = data.map(this.mapping_fn);
-      if (rerender) {
-        this.setState(() => {
-          return {
-            data,
-            loaded: true
-          };
-        });
-      } else {
-        this.state.data = data;
-      }
+      data = data.map(mapping_fn);
+      this.setState({data});
     }
   }
 
-  fetchData(rerender=false) {
-    if (this.datapath) {
-      fetch(this.datapath)
+  fetchData() {
+    if (this.props.datapath) {
+      this.state.data = [];
+      fetch(this.props.datapath)
       .then(this.responseCallback)
-      .then(data => this.dataCallback(data, rerender));
+      .then(data => this.dataCallback(data, this.props.mapping_fn));
     }
   }
 
   componentDidMount() {
-    this.fetchData(true);
+    this.fetchData();
   }
 
-  componentDidUpdate() {
-    this.fetchData();
+  componentDidUpdate(prevProps) {
+    if (prevProps.datapath !== this.props.datapath) {
+      this.fetchData();
+    }
   }
 }
 

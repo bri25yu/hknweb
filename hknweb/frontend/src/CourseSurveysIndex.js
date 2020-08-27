@@ -15,6 +15,8 @@ import {
     SEMESTER_FACET_NAME,
 } from './constants';
 
+import "./style/CourseSurveysIndex.css";
+
 
 class CourseSurveysIndex extends React.Component {
     constructor(props) {
@@ -49,16 +51,20 @@ class CourseSurveysIndex extends React.Component {
             "div",
             {className: "course-surveys-index"},
             [
-                <QueryBoard
+                <div className="query-board-container">
+                    <QueryBoard
                     facets={COURSESURVEYS_FACETS}
                     button_click_fn={this.button_click_fn}
                     key={"query-board"}
-                />,
-                <QuickDetails
-                    datapath={datapath}
-                    mapping_fn={COURSESURVEYS_QUICKDETAILS_MAPPING_FN}
-                    key={"quick-details"}
-                />,
+                    />
+                </div>,
+                <div className="quick-details-container">
+                    <QuickDetails
+                        datapath={datapath}
+                        mapping_fn={COURSESURVEYS_QUICKDETAILS_MAPPING_FN}
+                        key={"quick-details"}
+                    />
+                </div>,
             ]
         )
     }

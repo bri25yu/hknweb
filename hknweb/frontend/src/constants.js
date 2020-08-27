@@ -62,18 +62,45 @@ function COURSESURVEYS_CHART_MAPPING_FN(data) {
     ]
 }
 
-function COURSESURVEYS_QUICKDETAILSPANEL_MAPPING_FN(data) {
-    return [
-        `${COURSESURVEYS_RATINGS_DATAPATH}/?${RATING_SURVEY__ID_ATTRIBUTE_NAME}=${data.id}`,
-        COURSESURVEYS_CHART_MAPPING_FN,
-        [data.response_count],
-    ];
+function COURSESURVEYS_QUICKDETAILSPANEL_MAPPING_FN_WRAPPER(attributes) {
+    function COURSESURVEYS_QUICKDETAILSPANEL_MAPPING_FN(data) {
+        attributes[3] = [
+            "",
+            null,
+            [data.response_count]
+        ];
+        return [
+            `${COURSESURVEYS_RATINGS_DATAPATH}/?${RATING_SURVEY__ID_ATTRIBUTE_NAME}=${data.id}`,
+            COURSESURVEYS_CHART_MAPPING_FN,
+            attributes
+        ];
+    }
+    return COURSESURVEYS_QUICKDETAILSPANEL_MAPPING_FN;
 }
 
 export function COURSESURVEYS_QUICKDETAILS_MAPPING_FN(data) {
+    const attributes = [
+        [
+            "",
+            null,
+            [`${data.first_name} ${data.last_name}`]
+        ],
+        [
+            data.icsr_department,
+            (dept => `${dept.abbr} ${data.course_number}`),
+            null
+        ],
+        [
+            data.icsr_semester,
+            (semester => `${semester.year_section} ${semester.year}`),
+            null
+        ],
+        null
+    ];
+
     return [
         `${COURSESURVEYS_SURVEYS_DATAPATH}/?${SURVEY_ICSR__ID_ATTRIBUTE_NAME}=${data.id}`,
-        COURSESURVEYS_QUICKDETAILSPANEL_MAPPING_FN
+        COURSESURVEYS_QUICKDETAILSPANEL_MAPPING_FN_WRAPPER(attributes)
     ];
 }
 

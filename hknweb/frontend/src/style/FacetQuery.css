@@ -1,11 +1,12 @@
 .query-board {
     justify-self: start;
-    width: 30vw;
+    width: 100%;
     margin: 1em;
     padding: 1em;
 
     box-shadow: 0 0 1em rgba(0, 0, 0, 0.25);
     border-radius: 1em;
+    display: inline-block;
 }
 
 .facet {
@@ -14,6 +15,7 @@
 
 .facet-text {
     text-align: center;
+    font-weight: bold;
 }
 
 .search {
@@ -22,7 +24,7 @@
 }
 
 .search-box {
-    border: 0.2em solid transparent;
+    border: 0.2em solid rgba(211, 211, 211, 0.3);
     border-radius: 0.1em;
     padding: 0.5em;
     width: 100%;
@@ -31,7 +33,7 @@
 .search-box:focus {
     width: 100%;
     outline: none;
-    border: 0.2em solid lightgrey;
+    border: 0.2em solid rgba(128, 128, 128, 0.5);
 }
 
 .search-btn {

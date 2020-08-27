@@ -1,3 +1,18 @@
-.course-surveys-index {  /* TODO */
+.course-surveys-index {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
 
+.query-board-container {
+    flex-basis: 25vw;
+    display: inline-flex;
+    flex: 1;
+}
+
+.quick-details-container {
+    flex-basis: 60vw;
+    display: inline-flex;
+    flex: 2;
 }

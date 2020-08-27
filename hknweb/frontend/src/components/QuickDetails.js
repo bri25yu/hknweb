@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 import BaseApp from './BaseApp';
 
+import '../style/QuickDetails.css';
+
 
 class QuickDetails extends BaseApp {
     render() {
@@ -59,16 +61,28 @@ class QuickDetailsPanel extends BaseApp {
 class InfoBar extends Component {
     render() {
         const items = !(this.props.to_display && this.props.to_display.some(v => v)) ?
-            [] : this.props.to_display.map((item_to_display) => {
-            return <div className="info-bar-item" key={item_to_display}>
-                {item_to_display}
-            </div>
+            [] : this.props.to_display.map((item_info) => {
+            const [datapath, mapping_fn, data] = item_info;
+            return <InfoBarItem
+                datapath={datapath}
+                mapping_fn={mapping_fn}
+                data={data}
+            />
         });
         return React.createElement(
             "div",
             {className: "info-bar"},
             items
         )
+    }
+}
+
+class InfoBarItem extends BaseApp {
+    render() {
+        const item_to_display = this.state.data[0] || "";
+        return <div className="info-bar-item" key={item_to_display}>
+            {item_to_display}
+        </div>
     }
 }
 
@@ -85,9 +99,9 @@ class Chart extends BaseApp {
         });
 
         return React.createElement(
-            "div",
+            "table",
             {className: "chart"},
-            items
+            React.createElement("tbody", null, items)
         )
     }
 }
@@ -98,18 +112,25 @@ class ChartRow extends BaseApp {
         let data = this.state.data;
         let items = [];
         if (data && data.some(v => v)) {
+            const data = this.state.data[0];
             items = [
-                this.state.data.description,
-                <ValueBubble
-                    value={this.state.data.value}
-                    max_value={this.state.data.max_value}
-                    inverted={this.state.data.inverted}
-                    key={"value-bubble"}
-                />
+                <td className="chart-row-description-container">
+                    <div className="chart-row-description">
+                        {data.description}
+                    </div>
+                </td>,
+                <td className="chart-row-bubble-container">
+                    <ValueBubble
+                        value={data.value}
+                        max_value={data.max_value}
+                        inverted={data.inverted}
+                        key={"value-bubble"}
+                    />
+                </td>
             ]
         }
         return React.createElement(
-            "div",
+            "tr",
             {className:"chart-row"},
             items
         )
@@ -129,8 +150,15 @@ class Bubble extends Component {
     }
 
     render() {
-        return <div className="bubble" style={{color: this.color}}>
-            {this.description}
+        const style = {...this.props.style};
+        style["backgroundColor"] = this.color;
+        return <div className="bubble">
+            <div className="bubble-background" style={style}>
+                &nbsp;
+            </div>
+            <span className="bubble-text">
+                {this.description}
+            </span>
         </div>
     }
 }
@@ -141,23 +169,32 @@ class Bubble extends Component {
  * @requires props.max_value
  * @requires props.inverted
  */
-class ValueBubble extends Bubble {
-    constructor(props) {
-        super(props);
+class ValueBubble extends Component {
+    innerBubble() {
+        const value = this.props.value;
+        const max_value = this.props.max_value;
+        const inverted = this.props.inverted;
 
-        let color;
-        if (props.value) {
-            const scaled = props.value / props.max_value;
-            const r = (scaled < 0.66) ? 255 : 0;
-            const g = (scaled > 0.33) ? 255 : 0;
-            color = (props.inverted) ? `rgb(${g}, ${r}, 0)` : `rgb(${r}, ${g}, 0)`;
-        } else {
-            color = "white"
+        const description = `${value} / ${max_value}`;
+        
+        let width = Math.floor(value * 100 / max_value);
+        if (inverted) {
+            width = 100 - width;
         }
+        const color = (width > 75) ?  "#77c265" : (width > 50) ? "#f6e68b" : "#ed8d86";
+        const display_width = `${width}%`;
+        return [color, description, display_width];
+    }
 
-        const description = `${props.value} / ${props.max_value}`;
+    render() {
+        const [inner_color, inner_description, inner_width] = this.innerBubble();
 
-        this.color = color;
-        this.description = description;
+        return <div className="value-bubble" style={{"backgroundColor": "white"}}>
+            <Bubble
+                color={inner_color}
+                description={inner_description}
+                style={{width: inner_width}}
+            ></Bubble>
+        </div>
     }
 }
