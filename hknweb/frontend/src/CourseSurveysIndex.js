@@ -1,18 +1,16 @@
-// This is the explore view
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 
 import QueryBoard from './components/FacetQuery';
 import QuickDetails from './components/QuickDetails';
 import {
-    COURSE_FACET_NAME,
+    APP_NAMES,
+    COURSESURVEYS_DEFAULT_QUERYPARAMS,
     COURSESURVEYS_FACETS,
     COURSESURVEYS_QUICKDETAILS_DATAPATH_FN,
     COURSESURVEYS_QUICKDETAILS_MAPPING_FN,
-    COURSESURVEYSINDEX_NAME,
-    INSTRUCTOR_FACET_NAME,
-    SEMESTER_FACET_NAME,
+    ELEMENT_NAMES,
+    PROP_NAMES,
 } from './constants';
 
 import "./style/CourseSurveysIndex.css";
@@ -22,53 +20,55 @@ class CourseSurveysIndex extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            query_params: {
-                [COURSE_FACET_NAME]: "",
-                [INSTRUCTOR_FACET_NAME]: "",
-                [SEMESTER_FACET_NAME]: "",
-            },
+            [PROP_NAMES.QUERY_PARAMS]: COURSESURVEYS_DEFAULT_QUERYPARAMS,
         };
         this.button_click_fn = this.button_click_fn.bind(this);
     }
 
     button_click_fn(input) {
         const [facetName, userInput] = input;
-        const current_query_params = {...this.state.query_params};
+        const current_query_params = {...this.state[PROP_NAMES.QUERY_PARAMS]};
         current_query_params[facetName] = userInput;
         
         this.setState({
-            query_params: current_query_params,
+            [PROP_NAMES.QUERY_PARAMS]: current_query_params,
         })
     }
 
     render() {
-        const datapath = COURSESURVEYS_QUICKDETAILS_DATAPATH_FN(
-            this.state.query_params[INSTRUCTOR_FACET_NAME],
-            this.state.query_params[SEMESTER_FACET_NAME],
-            this.state.query_params[COURSE_FACET_NAME],
-        )
+        const datapath = COURSESURVEYS_QUICKDETAILS_DATAPATH_FN(this.state[PROP_NAMES.QUERY_PARAMS]);
         return React.createElement(
-            "div",
-            {className: "course-surveys-index"},
+            ELEMENT_NAMES.DIV,
+            {[PROP_NAMES.CLASSNAME]: "course-surveys-index"},
             [
-                <div className="query-board-container">
-                    <QueryBoard
-                    facets={COURSESURVEYS_FACETS}
-                    button_click_fn={this.button_click_fn}
-                    key={"query-board"}
-                    />
-                </div>,
-                <div className="quick-details-container">
-                    <QuickDetails
-                        datapath={datapath}
-                        mapping_fn={COURSESURVEYS_QUICKDETAILS_MAPPING_FN}
-                        key={"quick-details"}
-                    />
-                </div>,
+                React.createElement(
+                    ELEMENT_NAMES.DIV,
+                    {[PROP_NAMES.CLASSNAME]: "query-board-container"},
+                    React.createElement(
+                        QueryBoard,
+                        {
+                            [PROP_NAMES.FACETS]: COURSESURVEYS_FACETS,
+                            [PROP_NAMES.BUTTON_CLICK_FN]: this.button_click_fn,
+                            [PROP_NAMES.KEY]: "query-board",
+                        }
+                    )
+                ),
+                React.createElement(
+                    ELEMENT_NAMES.DIV,
+                    {[PROP_NAMES.CLASSNAME]: "quick-details-container"},
+                    React.createElement(
+                        QuickDetails,
+                        {
+                            [PROP_NAMES.DATAPATH]: datapath,
+                            [PROP_NAMES.MAPPING_FN]: COURSESURVEYS_QUICKDETAILS_MAPPING_FN,
+                            [PROP_NAMES.KEY]: "quick-details",
+                        }
+                    )
+                )
             ]
         )
     }
 }
 
-const container = document.getElementById(COURSESURVEYSINDEX_NAME);
+const container = document.getElementById(APP_NAMES.COURSESURVEYSINDEX);
 ReactDOM.render(<CourseSurveysIndex />, container);

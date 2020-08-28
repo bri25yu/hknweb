@@ -3,22 +3,29 @@ import React, { Component } from 'react';
 import BaseApp from './BaseApp';
 
 import '../style/QuickDetails.css';
+import {
+    ELEMENT_NAMES,
+    PROP_NAMES,
+} from '../constants'
 
 
 class QuickDetails extends BaseApp {
     render() {
         const items = this.state.data.map(dataset => {
             const [datapath, mapping_fn] = dataset;
-            return <QuickDetailsPanel
-                datapath={datapath}
-                mapping_fn={mapping_fn}
-                key={`quick-details-panel-${datapath}`}
-            />
+            return React.createElement(
+                QuickDetailsPanel,
+                {
+                    [PROP_NAMES.DATAPATH]: datapath,
+                    [PROP_NAMES.MAPPING_FN]: mapping_fn,
+                    [PROP_NAMES.KEY]: `quick-details-panel-${datapath}`,
+                }
+            );
         });
 
         return React.createElement(
-            "div",
-            {className: "quick-details"},
+            ELEMENT_NAMES.DIV,
+            {[PROP_NAMES.CLASSNAME]: "quick-details"},
             items
         )
     }
@@ -35,20 +42,26 @@ class QuickDetailsPanel extends BaseApp {
             const to_display = data[2];
             const p = data.slice(0, 2);
             items = [
-                <InfoBar
-                    to_display={to_display}
-                    key={'info-bar'}
-                />,
-                <Chart
-                    datapath={p[0]}
-                    mapping_fn={p[1]}
-                    key={'chart'}
-                />,
+                React.createElement(
+                    InfoBar,
+                    {
+                        [PROP_NAMES.TO_DISPLAY]: to_display,
+                        [PROP_NAMES.KEY]: 'info-bar',
+                    }   
+                ),
+                React.createElement(
+                    Chart,
+                    {
+                        [PROP_NAMES.DATAPATH]: p[0],
+                        [PROP_NAMES.MAPPING_FN]: p[1],
+                        [PROP_NAMES.KEY]: 'chart',
+                    }
+                ),
             ]
         }
         return React.createElement(
-            "div",
-            {className: "quick-details-panel"},
+            ELEMENT_NAMES.DIV,
+            {[PROP_NAMES.CLASSNAME]: "quick-details-panel"},
             items
         )
     }
@@ -60,18 +73,22 @@ class QuickDetailsPanel extends BaseApp {
  */
 class InfoBar extends Component {
     render() {
-        const items = !(this.props.to_display && this.props.to_display.some(v => v)) ?
-            [] : this.props.to_display.map((item_info) => {
+        const to_display = this.props[PROP_NAMES.TO_DISPLAY];
+        const items = !(to_display && to_display.some(v => v)) ?
+            [] : to_display.map((item_info) => {
             const [datapath, mapping_fn, data] = item_info;
-            return <InfoBarItem
-                datapath={datapath}
-                mapping_fn={mapping_fn}
-                data={data}
-            />
+            return React.createElement(
+                InfoBarItem,
+                {
+                    [PROP_NAMES.DATAPATH]: datapath,
+                    [PROP_NAMES.MAPPING_FN]: mapping_fn,
+                    [PROP_NAMES.DATA]: data,
+                }
+            )
         });
         return React.createElement(
-            "div",
-            {className: "info-bar"},
+            ELEMENT_NAMES.DIV,
+            {[PROP_NAMES.CLASSNAME]: "info-bar"},
             items
         )
     }
@@ -80,9 +97,14 @@ class InfoBar extends Component {
 class InfoBarItem extends BaseApp {
     render() {
         const item_to_display = this.state.data[0] || "";
-        return <div className="info-bar-item" key={item_to_display}>
-            {item_to_display}
-        </div>
+        return React.createElement(
+            ELEMENT_NAMES.DIV,
+            {
+                [PROP_NAMES.CLASSNAME]: "info-bar-item",
+                [PROP_NAMES.KEY]: item_to_display,
+            },
+            item_to_display
+        )
     }
 }
 
@@ -91,17 +113,24 @@ class Chart extends BaseApp {
     render() {
         const items = !this.state.data.some(v => v) ? [] : this.state.data.map(p => {
             const [datapath, mapping_fn] = p;
-            return <ChartRow
-                datapath={datapath}
-                mapping_fn={mapping_fn}
-                key={`chart-row-${datapath}`}
-            />;
+            return React.createElement(
+                ChartRow,
+                {
+                    [PROP_NAMES.DATAPATH]: datapath,
+                    [PROP_NAMES.MAPPING_FN]: mapping_fn,
+                    [PROP_NAMES.KEY]: `chart-row-${datapath}`,
+                }
+            )
         });
 
         return React.createElement(
-            "table",
-            {className: "chart"},
-            React.createElement("tbody", null, items)
+            ELEMENT_NAMES.TABLE,
+            {[PROP_NAMES.CLASSNAME]: "chart"},
+            React.createElement(
+                ELEMENT_NAMES.TBODY,
+                null,
+                items
+            )
         )
     }
 }
@@ -114,24 +143,33 @@ class ChartRow extends BaseApp {
         if (data && data.some(v => v)) {
             const data = this.state.data[0];
             items = [
-                <td className="chart-row-description-container">
-                    <div className="chart-row-description">
-                        {data.description}
-                    </div>
-                </td>,
-                <td className="chart-row-bubble-container">
-                    <ValueBubble
-                        value={data.value}
-                        max_value={data.max_value}
-                        inverted={data.inverted}
-                        key={"value-bubble"}
-                    />
-                </td>
+                React.createElement(
+                    ELEMENT_NAMES.TD,
+                    {[PROP_NAMES.CLASSNAME]: "chart-row-description-container"},
+                    React.createElement(
+                        ELEMENT_NAMES.DIV,
+                        {[PROP_NAMES.CLASSNAME]: "chart-row-description"},
+                        data[PROP_NAMES.DESCRIPTION]
+                    )
+                ),
+                React.createElement(
+                    ELEMENT_NAMES.TD,
+                    {[PROP_NAMES.CLASSNAME]: "chart-row-bubble-container"},
+                    React.createElement(
+                        ValueBubble,
+                        {
+                            [PROP_NAMES.VALUE]: data[PROP_NAMES.VALUE],
+                            [PROP_NAMES.MAX_VALUE]: data[PROP_NAMES.MAX_VALUE],
+                            [PROP_NAMES.INVERTED]: data[PROP_NAMES.INVERTED],
+                            [PROP_NAMES.KEY]: "value-bubble",
+                        }
+                    )
+                )
             ]
         }
         return React.createElement(
-            "tr",
-            {className:"chart-row"},
+            ELEMENT_NAMES.TR,
+            {[PROP_NAMES.CLASSNAME]: "chart-row"},
             items
         )
     }
@@ -151,15 +189,26 @@ class Bubble extends Component {
 
     render() {
         const style = {...this.props.style};
-        style["backgroundColor"] = this.color;
-        return <div className="bubble">
-            <div className="bubble-background" style={style}>
-                &nbsp;
-            </div>
-            <span className="bubble-text">
-                {this.description}
-            </span>
-        </div>
+        style[PROP_NAMES.BACKGROUNDCOLOR] = this.color;
+        return React.createElement(
+            ELEMENT_NAMES.DIV,
+            {[PROP_NAMES.CLASSNAME]: "bubble"},
+            [
+                React.createElement(
+                    ELEMENT_NAMES.DIV,
+                    {
+                        [PROP_NAMES.CLASSNAME]: "bubble-background",
+                        [PROP_NAMES.STYLE]: style,
+                    },
+                    ELEMENT_NAMES.NBSP
+                ),
+                React.createElement(
+                    ELEMENT_NAMES.SPAN,
+                    {[PROP_NAMES.CLASSNAME]: "bubble-text"},
+                    this.description
+                )
+            ]
+        )
     }
 }
 
@@ -171,9 +220,9 @@ class Bubble extends Component {
  */
 class ValueBubble extends Component {
     innerBubble() {
-        const value = this.props.value;
-        const max_value = this.props.max_value;
-        const inverted = this.props.inverted;
+        const value = this.props[PROP_NAMES.VALUE];
+        const max_value = this.props[PROP_NAMES.MAX_VALUE];
+        const inverted = this.props[PROP_NAMES.INVERTED];
 
         const description = `${value} / ${max_value}`;
         
@@ -189,12 +238,20 @@ class ValueBubble extends Component {
     render() {
         const [inner_color, inner_description, inner_width] = this.innerBubble();
 
-        return <div className="value-bubble" style={{"backgroundColor": "white"}}>
-            <Bubble
-                color={inner_color}
-                description={inner_description}
-                style={{width: inner_width}}
-            ></Bubble>
-        </div>
+        return React.createElement(
+            ELEMENT_NAMES.DIV,
+            {
+                [PROP_NAMES.CLASSNAME]: "value-bubble",
+                [PROP_NAMES.STYLE]: {[PROP_NAMES.BACKGROUNDCOLOR]: "white"},
+            },
+            React.createElement(
+                Bubble,
+                {
+                    [PROP_NAMES.COLOR]: inner_color,
+                    [PROP_NAMES.DESCRIPTION]: inner_description,
+                    [PROP_NAMES.STYLE]: {[PROP_NAMES.WIDTH]: inner_width},
+                }
+            )
+        )
     }
 }
