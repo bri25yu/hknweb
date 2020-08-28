@@ -22,10 +22,10 @@ class CourseSurveysIndex extends React.Component {
         this.state = {
             [PROP_NAMES.QUERY_PARAMS]: COURSESURVEYS_DEFAULT_QUERYPARAMS,
         };
-        this.button_click_fn = this.button_click_fn.bind(this);
+        this[PROP_NAMES.ONCHANGE_FN] = this[PROP_NAMES.ONCHANGE_FN].bind(this);
     }
 
-    button_click_fn(input) {
+    onChange_fn(input) {
         const [facetName, userInput] = input;
         const current_query_params = {...this.state[PROP_NAMES.QUERY_PARAMS]};
         current_query_params[facetName] = userInput;
@@ -48,7 +48,7 @@ class CourseSurveysIndex extends React.Component {
                         QueryBoard,
                         {
                             [PROP_NAMES.FACETS]: COURSESURVEYS_FACETS,
-                            [PROP_NAMES.BUTTON_CLICK_FN]: this.button_click_fn,
+                            [PROP_NAMES.ONCHANGE_FN]: this.onChange_fn,
                             [PROP_NAMES.KEY]: "query-board",
                         }
                     )

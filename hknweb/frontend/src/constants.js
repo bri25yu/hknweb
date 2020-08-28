@@ -15,7 +15,6 @@ export const ELEMENT_NAMES = {
 export const PROP_NAMES = {
     ACTIVEOPTION: "activeOption",
     BACKGROUNDCOLOR: "backgroundColor",
-    BUTTON_CLICK_FN: "button_click_fn",
     CLASSNAME: "className",
     COLOR: "color",
     DATA: "data",
@@ -28,7 +27,9 @@ export const PROP_NAMES = {
     KEY: "key",
     MAPPING_FN: "mapping_fn",
     MAX_VALUE: "max_value",
+    ONCHANGE_FN: "onChange_fn",
     OPTIONS: "options",
+    PLACEHOLDER: "placeholder",
     QUERY_PARAMS: "query_params",
     SHOWOPTIONS: "showOptions",
     STYLE: "style",
@@ -95,10 +96,22 @@ const FACET_NAMES = {
     COURSE: 'Course',
 }
 
-export const COURSESURVEYS_FACETS = {  // Key: entity name, Value: [datapath, mapping display function]
-    [FACET_NAMES.INSTRUCTOR]: [DATAPATHS.ACADEMICS.INSTRUCTORS, v => v[MODEL_ATTRIBUTES.INSTRUCTOR.INSTRUCTOR_ID]],
-    [FACET_NAMES.SEMESTER]: [DATAPATHS.ACADEMICS.SEMESTERS, v => v[MODEL_ATTRIBUTES.SEMESTER.YEAR_SECTION] + ' ' + v[MODEL_ATTRIBUTES.SEMESTER.YEAR]],
-    [FACET_NAMES.COURSE]: [DATAPATHS.ACADEMICS.COURSES, v => v[MODEL_ATTRIBUTES.ID].toString()],
+export const COURSESURVEYS_FACETS = {
+    [FACET_NAMES.INSTRUCTOR]: {
+        [PROP_NAMES.DATAPATH]: DATAPATHS.ACADEMICS.INSTRUCTORS,
+        [PROP_NAMES.MAPPING_FN]: v => v[MODEL_ATTRIBUTES.INSTRUCTOR.INSTRUCTOR_ID],
+        [PROP_NAMES.PLACEHOLDER]: "Search for an instructor...",
+    },
+    [FACET_NAMES.SEMESTER]: {
+        [PROP_NAMES.DATAPATH]: DATAPATHS.ACADEMICS.SEMESTERS,
+        [PROP_NAMES.MAPPING_FN]: v => v[MODEL_ATTRIBUTES.SEMESTER.YEAR_SECTION] + ' ' + v[MODEL_ATTRIBUTES.SEMESTER.YEAR],
+        [PROP_NAMES.PLACEHOLDER]: "Search for a semester...",
+    },
+    [FACET_NAMES.COURSE]: {
+        [PROP_NAMES.DATAPATH]: DATAPATHS.ACADEMICS.COURSES,
+        [PROP_NAMES.MAPPING_FN]: v => v[MODEL_ATTRIBUTES.ID].toString(),
+        [PROP_NAMES.PLACEHOLDER]: "Search for a course...",
+    },
 }
 
 export const COURSESURVEYS_DEFAULT_QUERYPARAMS = {

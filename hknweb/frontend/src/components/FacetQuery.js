@@ -24,7 +24,6 @@ class QueryBoard extends React.Component {
     render() {
         let facetElements = [];
         for (const [facetName, facetInfo] of Object.entries(this.facets)) {
-            const [datapath, mapping_fn] = facetInfo;
             facetElements.push(
                 React.createElement(
                     ELEMENT_NAMES.DIV,
@@ -34,9 +33,10 @@ class QueryBoard extends React.Component {
                         {
                             [PROP_NAMES.FACETNAME]: facetName,
                             [PROP_NAMES.KEY]: 'facet' + facetName,
-                            [PROP_NAMES.DATAPATH]: datapath,
-                            [PROP_NAMES.MAPPING_FN]: mapping_fn,
-                            [PROP_NAMES.BUTTON_CLICK_FN]: this.props.button_click_fn,
+                            [PROP_NAMES.DATAPATH]: facetInfo[PROP_NAMES.DATAPATH],
+                            [PROP_NAMES.MAPPING_FN]: facetInfo[PROP_NAMES.MAPPING_FN],
+                            [PROP_NAMES.ONCHANGE_FN]: this.props[PROP_NAMES.ONCHANGE_FN],
+                            [PROP_NAMES.PLACEHOLDER]: facetInfo[PROP_NAMES.PLACEHOLDER],
                         }
                     )
                 )
@@ -81,7 +81,8 @@ class Facet extends BaseApp {
                     {
                         [PROP_NAMES.OPTIONS]: options,
                         [PROP_NAMES.KEY]: 'query-bar',
-                        [PROP_NAMES.BUTTON_CLICK_FN]: (userInput) => this.props[PROP_NAMES.BUTTON_CLICK_FN]([this.facetName, userInput]),
+                        [PROP_NAMES.ONCHANGE_FN]: (userInput) => this.props[PROP_NAMES.ONCHANGE_FN]([this.facetName, userInput]),
+                        [PROP_NAMES.PLACEHOLDER]: this.props[PROP_NAMES.PLACEHOLDER],
                     }
                 )
             ]
@@ -101,7 +102,7 @@ class QueryBar extends React.Component {
      */
     constructor(props) {
       super(props);
-      this.button_click_fn = props.button_click_fn || ((userInput) => userInput);
+      this[PROP_NAMES.ONCHANGE_FN] = props[PROP_NAMES.ONCHANGE_FN] || ((userInput) => userInput);
     }
 
     static propTypes = {
@@ -129,15 +130,20 @@ class QueryBar extends React.Component {
             [PROP_NAMES.SHOWOPTIONS]: true,
             [PROP_NAMES.USERINPUT]: e.currentTarget.value
         });
+
+        this[PROP_NAMES.ONCHANGE_FN](userInput);
     };
     
     onClick = (e) => {
+        const userInput = e.currentTarget.innerText;
         this.setState({
-            activeOption: 0,
-            filteredOptions: [],
-            showOptions: false,
-            userInput: e.currentTarget.innerText
+            [PROP_NAMES.ACTIVEOPTION]: 0,
+            [PROP_NAMES.FILTEREDOPTIONS]: [],
+            [PROP_NAMES.SHOWOPTIONS]: false,
+            [PROP_NAMES.USERINPUT]: userInput
         });
+
+        this[PROP_NAMES.ONCHANGE_FN](userInput);
     };
 
     onKeyDown = (e) => {
@@ -149,6 +155,8 @@ class QueryBar extends React.Component {
                 [PROP_NAMES.SHOWOPTIONS]: false,
                 [PROP_NAMES.USERINPUT]: filteredOptions[activeOption]
             });
+
+            this[PROP_NAMES.ONCHANGE_FN](filteredOptions[activeOption]);
         } else if (e.keyCode === 38) {
             if (activeOption === 0) {
                 return;
@@ -156,7 +164,6 @@ class QueryBar extends React.Component {
             this.setState({ [PROP_NAMES.ACTIVEOPTION]: activeOption - 1 });
         } else if (e.keyCode === 40) {
             if (activeOption === filteredOptions.length - 1) {
-                console.log(activeOption);
                 return;
             }
             this.setState({ [PROP_NAMES.ACTIVEOPTION]: activeOption + 1 });
@@ -207,8 +214,8 @@ class QueryBar extends React.Component {
                         onChange={onChange}
                         onKeyDown={onKeyDown}
                         value={userInput}
+                        placeholder={this.props[PROP_NAMES.PLACEHOLDER]}
                     />
-                    <input type="button" value="" className="search-btn" onClick={() => this.button_click_fn(userInput)} />
                     {optionList}
                 </div>
             </React.Fragment>
