@@ -7,5 +7,5 @@ nvm install node
 nvm use node
 
 echo "Installing necessary packages"
-npm run provision --prefix ~/hknweb/hknweb/frontend
+npm i --prefix ~/hknweb/hknweb/frontend
 npm run $1 --prefix ~/hknweb/hknweb/frontend  # See hknweb/frontend/package.json
