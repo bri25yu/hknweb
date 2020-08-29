@@ -1,10 +1,45 @@
-import { Component } from "react";
-import {
-    ELEMENT_NAMES,
-    PROP_NAMES,
-} from "../constants"
+import React, { Component } from "react";
 
-class BaseApp extends Component {
+import { ELEMENT_NAMES, PROP_NAMES } from "../constants"
+
+
+export class BaseApp extends Component {
+    render() {
+        if (this.loaded()) {
+            return this._render();
+        }
+        return React.createElement(ELEMENT_NAMES.DIV);
+    }
+
+    componentDidMount() {
+        this.updateData();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps[PROP_NAMES.DATAPATH] !== this.props[PROP_NAMES.DATAPATH]) {
+            this.updateData();
+        }
+    }
+
+    loaded() {
+        return this.state.data && this.state.data.some(v => v);
+    }
+
+    _render() {
+        return React.createElement(ELEMENT_NAMES.DIV);
+    }
+
+    updateData() {
+        this.setState(() => {});
+    }
+
+    static fetchData(datapath) {
+        return fetch(datapath).then(response => response.json());
+    }
+}
+
+
+export class DataFetchApp extends BaseApp {
     constructor(props) {
         super(props);
             this.state = {
@@ -28,7 +63,7 @@ class BaseApp extends Component {
         }
     }
 
-    fetchData() {
+    updateData() {
         if (this.props[PROP_NAMES.DATAPATH]) {
             this.state.data = [];
             fetch(this.props[PROP_NAMES.DATAPATH])
@@ -36,16 +71,4 @@ class BaseApp extends Component {
             .then(data => this.dataCallback(data, this.props[PROP_NAMES.MAPPING_FN]));
         }
     }
-
-  componentDidMount() {
-    this.fetchData();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps[PROP_NAMES.DATAPATH] !== this.props[PROP_NAMES.DATAPATH]) {
-      this.fetchData();
-    }
-  }
 }
-
-export default BaseApp;

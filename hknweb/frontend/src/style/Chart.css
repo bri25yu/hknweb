@@ -1,0 +1,25 @@
+.chart {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.chart-row {
+    width: 100%;
+    padding: 0;
+    border-top: 0.1em solid lightgrey;
+}
+
+.chart-row-description-container {
+    width: "60%";
+}
+
+.chart-row-description {
+    display:inline-block;
+    margin: 0.2em 0.5em;
+}
+
+.chart-row-value-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}

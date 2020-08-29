@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import "../style/FacetQuery.css";
 import { AUTOCOMPLETE_MAX_ITEMS } from "./constants";
-import BaseApp from "./BaseApp";
+import { DataFetchApp } from "./BaseApp";
 import {
   ELEMENT_NAMES,
   PROP_NAMES,
@@ -53,7 +53,7 @@ class QueryBoard extends React.Component {
 export default QueryBoard;
 
 
-class Facet extends BaseApp {
+class Facet extends DataFetchApp {
     constructor(props) {
         super(props);
         this.facetName = props.facetName;

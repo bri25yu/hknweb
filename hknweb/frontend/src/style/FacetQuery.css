@@ -10,7 +10,7 @@
 }
 
 .facet {
-    padding-bottom: 5em;
+
 }
 
 .facet-text {
@@ -19,7 +19,8 @@
 }
 
 .search {
-    margin: 1em;
+    margin: 0 1em;
+    margin-bottom: 4em;
     padding: 1em;
 }
 

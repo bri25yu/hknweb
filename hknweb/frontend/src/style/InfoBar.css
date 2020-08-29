@@ -1,0 +1,12 @@
+.info-bar {
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+    vertical-align: middle;
+    margin: 0.4em;
+}
+
+.info-bar-item {
+    display: inline-block;
+    margin: auto 2em;
+}
