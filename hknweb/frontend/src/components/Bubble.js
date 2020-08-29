@@ -25,12 +25,16 @@ export class Bubble extends Component {
                     {
                         [PROP_NAMES.CLASSNAME]: "bubble-background",
                         [PROP_NAMES.STYLE]: style,
+                        [PROP_NAMES.KEY]: "bubble-background",
                     },
                     ELEMENT_NAMES.NBSP
                 ),
                 React.createElement(
                     ELEMENT_NAMES.SPAN,
-                    {[PROP_NAMES.CLASSNAME]: "bubble-text"},
+                    {
+                        [PROP_NAMES.CLASSNAME]: "bubble-text",
+                        [PROP_NAMES.KEY]: "bubble-text",
+                    },
                     this.props[PROP_NAMES.DESCRIPTION]
                 )
             ]

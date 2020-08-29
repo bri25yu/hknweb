@@ -43,13 +43,15 @@ class CourseSurveysIndex extends BaseApp {
             [
                 React.createElement(
                     ELEMENT_NAMES.DIV,
-                    {[PROP_NAMES.CLASSNAME]: "query-board-container"},
+                    {
+                        [PROP_NAMES.CLASSNAME]: "query-board-container",
+                        [PROP_NAMES.KEY]: "query-board-container",
+                    },
                     React.createElement(
                         QueryBoard,
                         {
                             [PROP_NAMES.FACETS]: COURSESURVEYS_FACETS,
                             [PROP_NAMES.ONCHANGE_FN]: this.onChange_fn,
-                            [PROP_NAMES.KEY]: "query-board",
                         }
                     )
                 ),
@@ -112,6 +114,7 @@ class CourseSurveysIndex extends BaseApp {
                     {
                         [PROP_NAMES.INFO_BAR]: infoBar,
                         [PROP_NAMES.CHART]: chart,
+                        [PROP_NAMES.KEY]: `quick-details-panel-${survey_path}`,
                     }
                 )
             })
@@ -131,15 +134,30 @@ class CourseSurveysIndex extends BaseApp {
             ]
         ).then(items => items.map(item => React.createElement(
             InfoBarItem,
-            {[PROP_NAMES.ITEM_TO_DISPLAY]: item}
+            {
+                [PROP_NAMES.ITEM_TO_DISPLAY]: item,
+                [PROP_NAMES.KEY]: item,
+            }
         )))
-        .then(info_bar_items => React.createElement(InfoBar, {[PROP_NAMES.TO_DISPLAY]: info_bar_items}))
+        .then(info_bar_items => React.createElement(
+            InfoBar,
+            {
+                [PROP_NAMES.TO_DISPLAY]: info_bar_items,
+                [PROP_NAMES.KEY]: ELEMENT_NAMES.INFOBAR,
+            }
+        ))
     }
 
     static getChart(survey) {
         return CourseSurveysIndex.fetchData(`${DATAPATHS.COURSESURVEYS.RATINGS}/?${DJANGO_QL(MODEL_ATTRIBUTES.RATING.RATING_SURVEY, MODEL_ATTRIBUTES.ID)}=${survey[MODEL_ATTRIBUTES.ID]}`)
             .then(ratings => Promise.all(ratings.map(CourseSurveysIndex.getChartRow)))
-            .then(chart_rows => React.createElement(Chart, {[PROP_NAMES.CHART_ROWS]: chart_rows}))
+            .then(chart_rows => React.createElement(
+                Chart,
+                {
+                    [PROP_NAMES.CHART_ROWS]: chart_rows,
+                    [PROP_NAMES.KEY]: ELEMENT_NAMES.CHART,
+                }
+            ))
     }
 
     static getChartRow(rating) {
@@ -156,6 +174,7 @@ class CourseSurveysIndex extends BaseApp {
             {
                 [PROP_NAMES.DESCRIPTION]: rating[MODEL_ATTRIBUTES.RATING.QUESTION_TEXT],
                 [PROP_NAMES.VALUE]: value,
+                [PROP_NAMES.KEY]: `chart-row-${JSON.stringify(rating)}`,
             }
         )
     }
