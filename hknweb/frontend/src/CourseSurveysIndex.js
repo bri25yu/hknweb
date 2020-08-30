@@ -32,6 +32,7 @@ class CourseSurveysIndex extends BaseApp {
             [PROP_NAMES.QUERY_PARAMS]: COURSESURVEYS_DEFAULT_QUERYPARAMS,
             [PROP_NAMES.QUICK_DETAILS]: null,
             [PROP_NAMES.CURRENT_SELECTION]: SELECTION_NAMES.RATINGS,
+            [PROP_NAMES.QUERYBOARD]: null,
         };
 
         this[PROP_NAMES.ONCHANGE_FN] = this[PROP_NAMES.ONCHANGE_FN].bind(this);
@@ -63,7 +64,7 @@ class CourseSurveysIndex extends BaseApp {
     }
 
     loaded() {
-        return Boolean(this.state[PROP_NAMES.QUICK_DETAILS]);
+        return this.state[PROP_NAMES.QUICK_DETAILS] && this.state[PROP_NAMES.QUERYBOARD];
     }
 
     _render() {
@@ -81,7 +82,7 @@ class CourseSurveysIndex extends BaseApp {
                         SelectorPanel,
                         {
                             [PROP_NAMES.SELECTIONS]: SELECTIONS,
-                            [PROP_NAMES.VALUE]: this.COURSESURVEYS_SELECTIONS[this.state[PROP_NAMES.CURRENT_SELECTION]][PROP_NAMES.SELECTION_PANEL_FN](),
+                            [PROP_NAMES.VALUE]: this.state[PROP_NAMES.QUERYBOARD],
                             [PROP_NAMES.ONCLICK_FN]: this.onClick_fn,
                         }
                     )
@@ -99,9 +100,19 @@ class CourseSurveysIndex extends BaseApp {
     }
 
     updateData() {
-        const quick_details_fn = this.COURSESURVEYS_SELECTIONS[this.state[PROP_NAMES.CURRENT_SELECTION]][PROP_NAMES.QUICK_DETAILS_FN];
+        const current = this.COURSESURVEYS_SELECTIONS[this.state[PROP_NAMES.CURRENT_SELECTION]];
+        const quick_details_fn = current[PROP_NAMES.QUICK_DETAILS_FN];
+        const query_board_fn = current[PROP_NAMES.SELECTION_PANEL_FN];
+
         Promise.resolve(quick_details_fn())
-        .then(quick_details => this.setState({[PROP_NAMES.QUICK_DETAILS]: quick_details}));
+        .then(quick_details => Promise.all([
+            quick_details,
+            query_board_fn(),
+        ]))
+        .then(p => this.setState({
+            [PROP_NAMES.QUICK_DETAILS]: p[0],
+            [PROP_NAMES.QUERYBOARD]: p[1],
+        }));
     }
 
     getRatingsQueryBoard() {
@@ -128,7 +139,15 @@ class CourseSurveysIndex extends BaseApp {
     }
 
     getInstructorQueryBoard() {
-        return React.createElement(ELEMENT_NAMES.DIV);
+        const facets = {};
+        facets[FACET_NAMES.INSTRUCTOR] = COURSESURVEYS_FACETS[FACET_NAMES.INSTRUCTOR];
+        return React.createElement(
+            QueryBoard,
+            {
+                [PROP_NAMES.FACETS]: facets,
+                [PROP_NAMES.ONCHANGE_FN]: this.onChange_fn,
+            }
+        )
     }
 
     getInstructorQuickDetails() {
@@ -136,7 +155,15 @@ class CourseSurveysIndex extends BaseApp {
     }
 
     getCourseQueryBoard() {
-        return React.createElement(ELEMENT_NAMES.DIV);
+        const facets = {};
+        facets[FACET_NAMES.COURSE] = COURSESURVEYS_FACETS[FACET_NAMES.COURSE];
+        return React.createElement(
+            QueryBoard,
+            {
+                [PROP_NAMES.FACETS]: facets,
+                [PROP_NAMES.ONCHANGE_FN]: this.onChange_fn,
+            }
+        )
     }
 
     getCourseQuickDetails() {
@@ -249,6 +276,7 @@ class CourseSurveysIndex extends BaseApp {
     onClick_fn(selection) {
         this.state[PROP_NAMES.CURRENT_SELECTION] = selection.currentTarget.value;
         this.state[PROP_NAMES.QUERY_PARAMS] = COURSESURVEYS_DEFAULT_QUERYPARAMS;
+
         this.updateData();
     }
     

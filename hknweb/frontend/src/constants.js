@@ -44,6 +44,7 @@ export const PROP_NAMES = {
     ONCLICK_FN: "onClick_fn",
     OPTIONS: "options",
     PLACEHOLDER: "placeholder",
+    QUERYBOARD: "query_board",
     QUERY_PARAMS: "query_params",
     QUICK_DETAILS: "quick_details",
     QUICK_DETAILS_FN: "quick_details_fn",

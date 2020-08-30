@@ -42,7 +42,11 @@ export class SelectorPanel extends Component {
                     },
                     items
                 ),
-                this.props[PROP_NAMES.VALUE],
+                React.createElement(
+                    ELEMENT_NAMES.DIV,
+                    null,
+                    this.props[PROP_NAMES.VALUE],
+                ),
             ]
         )
     }

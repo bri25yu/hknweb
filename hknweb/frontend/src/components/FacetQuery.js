@@ -10,20 +10,9 @@ import {
 
 
 class QueryBoard extends React.Component {
-    /**
-     * 
-     * @param {*} props 
-     * 
-     * @requires props.facets
-     */
-    constructor(props) {
-        super(props);
-        this.facets = props.facets;
-    }
-
     render() {
         let facetElements = [];
-        for (const [facetName, facetInfo] of Object.entries(this.facets)) {
+        for (const [facetName, facetInfo] of Object.entries(this.props[PROP_NAMES.FACETS])) {
             facetElements.push(
                 React.createElement(
                     ELEMENT_NAMES.DIV,
