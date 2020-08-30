@@ -15,8 +15,6 @@ module.exports = {
       ]
     },
     entry: {
-      InstructorApp: './src/InstructorApp.js',
-      DepartmentApp: './src/DepartmentApp.js',
       CourseSurveysIndex: './src/CourseSurveysIndex.js'
     },
     output: {
