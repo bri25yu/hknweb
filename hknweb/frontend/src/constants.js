@@ -3,6 +3,7 @@ export const APP_NAMES = {
 }
 
 export const ELEMENT_NAMES = {
+    BUTTON: "button",
     CHART: "Chart",
     CHARTROW: "ChartRow",
     DIV: "div",
@@ -24,6 +25,7 @@ export const PROP_NAMES = {
     CHART_ROWS: "chart_rows",
     CLASSNAME: "className",
     COLOR: "color",
+    CURRENT_SELECTION: "current_selection",
     DATA: "data",
     DATAPATH: "datapath",
     DESCRIPTION: "description",
@@ -38,11 +40,17 @@ export const PROP_NAMES = {
     MAX_VALUE: "max_value",
     NAME: "name",
     ONCHANGE_FN: "onChange_fn",
+    ONCLICK: "onClick",
+    ONCLICK_FN: "onClick_fn",
     OPTIONS: "options",
     PLACEHOLDER: "placeholder",
     QUERY_PARAMS: "query_params",
     QUICK_DETAILS: "quick_details",
+    QUICK_DETAILS_FN: "quick_details_fn",
     QUICK_DETAILS_PANELS: "quick_details_panels",
+    SELECTIONS: "selections",
+    SELECTION_PANEL_FN: "selection_panel_fn",
+    SELECTION_VALUES: "selection_values",
     SHOWOPTIONS: "showOptions",
     STYLE: "style",
     TO_DISPLAY: "to_display",
@@ -137,4 +145,13 @@ export const COURSESURVEYS_DEFAULT_QUERYPARAMS = {
     [FACET_NAMES.COURSE]: "",
     [FACET_NAMES.INSTRUCTOR]: "",
     [FACET_NAMES.SEMESTER]: "",
+    [FACET_NAMES.YEAR]: "",
 }
+
+export const SELECTION_NAMES = {
+    RATINGS: "Ratings",
+    INSTRUCTOR: "Instructor",
+    SEMESTER: "Semester",
+}
+
+export const SELECTIONS = Object.entries(SELECTION_NAMES).map(p => p[1]);

@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 
-import PropTypes from "prop-types";
-
 import { Chart } from "./Chart";
 import { InfoBar } from "./InfoBar";
 

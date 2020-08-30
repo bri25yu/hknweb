@@ -213,6 +213,7 @@ class QueryBar extends React.Component {
                         className="search-box"
                         onChange={onChange}
                         onKeyDown={onKeyDown}
+                        onClick={onClick}
                         value={userInput}
                         placeholder={this.props[PROP_NAMES.PLACEHOLDER]}
                     />

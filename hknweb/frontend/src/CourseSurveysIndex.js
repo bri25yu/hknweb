@@ -7,6 +7,7 @@ import { QuickDetails, QuickDetailsPanel } from "./components/QuickDetails";
 import { InfoBar, InfoBarItem } from "./components/InfoBar";
 import { Chart, ChartRow } from "./components/Chart";
 import { ValueBubble } from "./components/Bubble";
+import { SelectorPanel } from "./components/SelectorPanel";
 import {
     APP_NAMES,
     COURSESURVEYS_DEFAULT_QUERYPARAMS,
@@ -17,6 +18,8 @@ import {
     ELEMENT_NAMES,
     MODEL_ATTRIBUTES,
     PROP_NAMES,
+    SELECTION_NAMES,
+    SELECTIONS,
 } from "./constants";
 
 import "./style/CourseSurveysIndex.css";
@@ -28,8 +31,35 @@ class CourseSurveysIndex extends BaseApp {
         this.state = {
             [PROP_NAMES.QUERY_PARAMS]: COURSESURVEYS_DEFAULT_QUERYPARAMS,
             [PROP_NAMES.QUICK_DETAILS]: null,
+            [PROP_NAMES.CURRENT_SELECTION]: SELECTION_NAMES.RATINGS,
         };
+
         this[PROP_NAMES.ONCHANGE_FN] = this[PROP_NAMES.ONCHANGE_FN].bind(this);
+        this.onClick_fn = this.onClick_fn.bind(this);
+
+        this.getRatingsQueryBoard = this.getRatingsQueryBoard.bind(this);
+        this.getRatingsQuickDetails = this.getRatingsQuickDetails.bind(this);
+
+        this.getInstructorQueryBoard = this.getInstructorQueryBoard.bind(this);
+        this.getInstructorQuickDetails = this.getInstructorQuickDetails.bind(this);
+
+        this.getCourseQueryBoard = this.getCourseQueryBoard.bind(this);
+        this.getCourseQuickDetails = this.getCourseQuickDetails.bind(this);
+
+        this.COURSESURVEYS_SELECTIONS = {
+            [SELECTION_NAMES.INSTRUCTOR]: {
+                [PROP_NAMES.SELECTION_PANEL_FN]: this.getInstructorQueryBoard,
+                [PROP_NAMES.QUICK_DETAILS_FN]: this.getInstructorQuickDetails,
+            },
+            [SELECTION_NAMES.SEMESTER]: {
+                [PROP_NAMES.SELECTION_PANEL_FN]: this.getCourseQueryBoard,
+                [PROP_NAMES.QUICK_DETAILS_FN]: this.getCourseQuickDetails,
+            },
+            [SELECTION_NAMES.RATINGS]: {
+                [PROP_NAMES.SELECTION_PANEL_FN]: this.getRatingsQueryBoard,
+                [PROP_NAMES.QUICK_DETAILS_FN]: this.getRatingsQuickDetails,
+            },
+        }
     }
 
     loaded() {
@@ -44,14 +74,15 @@ class CourseSurveysIndex extends BaseApp {
                 React.createElement(
                     ELEMENT_NAMES.DIV,
                     {
-                        [PROP_NAMES.CLASSNAME]: "query-board-container",
-                        [PROP_NAMES.KEY]: "query-board-container",
+                        [PROP_NAMES.CLASSNAME]: "selection-panel-container",
+                        [PROP_NAMES.KEY]: "selection-panel-container",
                     },
                     React.createElement(
-                        QueryBoard,
+                        SelectorPanel,
                         {
-                            [PROP_NAMES.FACETS]: COURSESURVEYS_FACETS,
-                            [PROP_NAMES.ONCHANGE_FN]: this.onChange_fn,
+                            [PROP_NAMES.SELECTIONS]: SELECTIONS,
+                            [PROP_NAMES.VALUE]: this.COURSESURVEYS_SELECTIONS[this.state[PROP_NAMES.CURRENT_SELECTION]][PROP_NAMES.SELECTION_PANEL_FN](),
+                            [PROP_NAMES.ONCLICK_FN]: this.onClick_fn,
                         }
                     )
                 ),
@@ -68,11 +99,22 @@ class CourseSurveysIndex extends BaseApp {
     }
 
     updateData() {
-        Promise.resolve(this.getQuickDetails())
-            .then(quick_details => this.setState({[PROP_NAMES.QUICK_DETAILS]: quick_details}));
+        const quick_details_fn = this.COURSESURVEYS_SELECTIONS[this.state[PROP_NAMES.CURRENT_SELECTION]][PROP_NAMES.QUICK_DETAILS_FN];
+        Promise.resolve(quick_details_fn())
+        .then(quick_details => this.setState({[PROP_NAMES.QUICK_DETAILS]: quick_details}));
     }
 
-    getQuickDetails() {
+    getRatingsQueryBoard() {
+        return React.createElement(
+            QueryBoard,
+            {
+                [PROP_NAMES.FACETS]: COURSESURVEYS_FACETS,
+                [PROP_NAMES.ONCHANGE_FN]: this.onChange_fn,
+            }
+        )
+    }
+
+    getRatingsQuickDetails() {
         const icsrs_datapath = CourseSurveysIndex.parseQueryParams(this.state[PROP_NAMES.QUERY_PARAMS]);
 
         return CourseSurveysIndex.fetchData(icsrs_datapath)
@@ -83,6 +125,22 @@ class CourseSurveysIndex extends BaseApp {
                         {[PROP_NAMES.QUICK_DETAILS_PANELS]: quick_details_panels}
                     )
             });
+    }
+
+    getInstructorQueryBoard() {
+        return React.createElement(ELEMENT_NAMES.DIV);
+    }
+
+    getInstructorQuickDetails() {
+        return React.createElement(ELEMENT_NAMES.DIV);
+    }
+
+    getCourseQueryBoard() {
+        return React.createElement(ELEMENT_NAMES.DIV);
+    }
+
+    getCourseQuickDetails() {
+        return React.createElement(ELEMENT_NAMES.DIV);
     }
 
     static parseQueryParams(query_params) {
@@ -185,6 +243,12 @@ class CourseSurveysIndex extends BaseApp {
         current_query_params[facetName] = userInput;
 
         this.state[PROP_NAMES.QUERY_PARAMS] = current_query_params;
+        this.updateData();
+    }
+
+    onClick_fn(selection) {
+        this.state[PROP_NAMES.CURRENT_SELECTION] = selection.currentTarget.value;
+        this.state[PROP_NAMES.QUERY_PARAMS] = COURSESURVEYS_DEFAULT_QUERYPARAMS;
         this.updateData();
     }
     

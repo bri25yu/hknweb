@@ -5,14 +5,18 @@
     flex-wrap: wrap;
 }
 
-.query-board-container {
+.selection-panel-container {
     flex-basis: 25vw;
     display: inline-flex;
     flex: 1;
+
+    box-shadow: 0 0 1em rgba(0, 0, 0, 0.25);
+    border-radius: 1em;
 }
 
 .quick-details-container {
     flex-basis: 60vw;
     display: inline-flex;
     flex: 2;
+    margin-top: -1em;
 }
