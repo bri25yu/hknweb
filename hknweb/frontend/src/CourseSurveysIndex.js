@@ -8,6 +8,8 @@ import { InfoBar, InfoBarItem } from "./components/InfoBar";
 import { Chart, ChartRow } from "./components/Chart";
 import { ValueBubble } from "./components/Bubble";
 import { SelectorPanel } from "./components/SelectorPanel";
+import { Spreadsheet } from "./components/Spreadsheet";
+import { EntityDetail, EntityDetailsPanel } from "./components/EntityDetails";
 import {
     APP_NAMES,
     COURSESURVEYS_DEFAULT_QUERYPARAMS,

@@ -7,6 +7,7 @@ export const ELEMENT_NAMES = {
     CHART: "Chart",
     CHARTROW: "ChartRow",
     DIV: "div",
+    ENTITYDETAIL: "EntityDetail",
     INFOBAR: "InfoBar",
     INFOBARITEM: "InfoBarItem",
     QUICKDETAILSPANEL: "QuickDetailsPanel",
@@ -14,6 +15,7 @@ export const ELEMENT_NAMES = {
     TABLE: "table",
     TBODY: "tbody",
     TD: "td",
+    TH: "th",
     TR: "tr",
     NBSP: "\u00A0",
 }
@@ -29,6 +31,7 @@ export const PROP_NAMES = {
     DATA: "data",
     DATAPATH: "datapath",
     DESCRIPTION: "description",
+    ENTITY_DETAILS: "entity_details",
     FACETNAME: "facetName",
     FACETS: "facets",
     FILTEREDOPTIONS: "filteredOptions",
@@ -54,11 +57,13 @@ export const PROP_NAMES = {
     SELECTION_VALUES: "selection_values",
     SHOWOPTIONS: "showOptions",
     STYLE: "style",
+    TITLE: "title",
     TO_DISPLAY: "to_display",
     TYPE: "type",
     USERINPUT: "userInput",
     VALUE: "value",
     WIDTH: "width",
+    WIDTHS: "widths",
 }
 
 const BASE_DATAPATHS = {

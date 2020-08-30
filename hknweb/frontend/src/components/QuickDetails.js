@@ -1,8 +1,5 @@
 import React, { Component } from "react";
 
-import { Chart } from "./Chart";
-import { InfoBar } from "./InfoBar";
-
 import { ELEMENT_NAMES, PROP_NAMES } from "../constants";
 import { arrayOfFn, instanceOfFn } from "../lib/utils";
 import "../style/QuickDetails.css";
