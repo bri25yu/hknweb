@@ -66,6 +66,7 @@ Vagrant.configure("2") do |config|
 
     apt-get update && apt-get install -y \
         curl \
+        dos2unix \
         git \
         libmysqlclient-dev \
         make \
@@ -97,6 +98,7 @@ Vagrant.configure("2") do |config|
   $provision = <<-SHELL
     cd ~/hknweb; make setup
 
+    dos2unix ./provision_frontend.sh
     ./provision_frontend.sh dev
   SHELL
 
