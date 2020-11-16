@@ -4,13 +4,15 @@ PIP_HOME = $(shell python3 -c "import site; import os; print(os.path.join(site.U
 IP ?= 127.0.0.1
 PORT ?= 3000
 
+FRONTEND_DIR := ./hknweb/frontend
+
 .PHONY: dev
 dev:
 	HKNWEB_MODE='dev' pipenv run python ./manage.py runserver $(IP):$(PORT)
 
 .PHONY: devf
 devf:
-	npm run dev --prefix hknweb/frontend
+	npm run dev --prefix $(FRONTEND_DIR)
 
 .PHONY: livereload
 livereload:
@@ -18,6 +20,9 @@ livereload:
 
 setup: pipenv venv migrate
 
+.PHONY: provision
+provision:
+	npm run provision --prefix $(FRONTEND_DIR)
 .PHONY: pipenv
 pipenv:
 	pip3 install --user pipenv || pip install --user pipenv
